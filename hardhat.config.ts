@@ -8,27 +8,28 @@ import 'hardhat-gas-reporter';
 
 import * as dotenv from 'dotenv';
 import { HardhatUserConfig } from 'hardhat/types';
+import { env } from 'process';
 
 dotenv.config();
 
-// polygon: {
-//   url: process.env.API_URL,
-//   accounts: [process.env.PRIVATE_KEY!],
-// },
 const config: HardhatUserConfig = {
     defaultNetwork: 'hardhat',
     networks: {
         hardhat: {},
         localhost: { timeout: 600000 },
+        goerli: {
+            url: `${env.ALCHEMY_API_URL}`,
+            accounts: [`${env.PRIVATE_KEY}`],
+        },
     },
     solidity: {
         version: '0.8.9',
         settings: {
             optimizer: {
                 enabled: true,
-                runs: 800
-            }
-        }
+                runs: 800,
+            },
+        },
     },
     contractSizer: {
         alphaSort: true,
@@ -37,12 +38,12 @@ const config: HardhatUserConfig = {
     gasReporter: {
         enabled: process.env.REPORT_GAS === 'true' ? true : false,
         noColors: true,
-        outputFile: 'reports/gas_usage/summary.txt'
+        outputFile: 'reports/gas_usage/summary.txt',
     },
     typechain: {
         outDir: 'typechain',
-        target: 'ethers-v5'
-    }
-}
+        target: 'ethers-v5',
+    },
+};
 
 export default config;
